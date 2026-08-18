@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+just<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1149,3 +1149,343 @@ function updateNearbyPlaces() {
 
 
         <div 
+                    class="place-icon">⛽</div>
+
+            <div>
+                <strong>Fuel Stations</strong>
+                <small>
+                    Find fuel stations nearby.
+                </small>
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================
+   NAVIGATION
+===================================== */
+
+document
+    .getElementById("navigateBtn")
+    .addEventListener("click", function() {
+
+        const place =
+            document.getElementById("destination").value.trim();
+
+        if (!place) {
+            showToast("Enter a destination first.");
+            document.getElementById("destination").focus();
+            return;
+        }
+
+        let url =
+            "https://www.google.com/maps/search/?api=1&query=" +
+            encodeURIComponent(place);
+
+        if (currentLocation) {
+
+            url =
+                "https://www.google.com/maps/dir/?api=1" +
+                "&origin=" +
+                currentLocation.latitude +
+                "," +
+                currentLocation.longitude +
+                "&destination=" +
+                encodeURIComponent(place);
+        }
+
+        window.open(url, "_blank");
+    });
+
+
+/* =====================================
+   SAFE PLACES
+===================================== */
+
+document
+    .getElementById("safePlacesBtn")
+    .addEventListener("click", function() {
+
+        window.open(
+            "https://www.google.com/maps/search/hospitals+police+stations+emergency+services+near+me",
+            "_blank"
+        );
+
+    });
+
+
+/* =====================================
+   EMERGENCY
+===================================== */
+
+document
+    .getElementById("emergencyBtn")
+    .addEventListener("click", function() {
+
+        let locationInfo =
+            "Location not detected.";
+
+        if (currentLocation) {
+
+            locationInfo =
+                currentLocation.latitude.toFixed(6) +
+                ", " +
+                currentLocation.longitude.toFixed(6);
+        }
+
+        openModal(`
+
+            <div style="text-align:center;">
+
+                <div style="font-size:55px;">
+                    🆘
+                </div>
+
+                <h2>Emergency Mode</h2>
+
+                <p>
+                    Stay calm. You can share your
+                    current location with someone
+                    you trust.
+                </p>
+
+                <p style="margin-top:15px;color:white;">
+                    📍 ${locationInfo}
+                </p>
+
+                <button
+                    class="modal-action danger"
+                    onclick="shareCurrentLocation()">
+
+                    📤 Share My Location
+
+                </button>
+
+            </div>
+
+        `);
+
+    });
+
+
+/* =====================================
+   SHARE LOCATION
+===================================== */
+
+document
+    .getElementById("shareBtn")
+    .addEventListener(
+        "click",
+        shareCurrentLocation
+    );
+
+
+function shareCurrentLocation() {
+
+    if (!currentLocation) {
+
+        showToast(
+            "Find your location first."
+        );
+
+        modal.classList.remove("show");
+
+        return;
+    }
+
+    const url =
+        "https://www.google.com/maps?q=" +
+        currentLocation.latitude +
+        "," +
+        currentLocation.longitude;
+
+    const text =
+        "My SafeRoute location:\n" + url;
+
+
+    if (navigator.share) {
+
+        navigator.share({
+            title: "My SafeRoute Location",
+            text: text
+        }).catch(function() {});
+
+    } else {
+
+        openModal(`
+
+            <h2>📍 My Location</h2>
+
+            <p>
+                ${url}
+            </p>
+
+        `);
+
+    }
+
+}
+
+
+/* =====================================
+   AI ASSISTANT
+===================================== */
+
+document
+    .getElementById("aiSend")
+    .addEventListener(
+        "click",
+        askAI
+    );
+
+
+document
+    .getElementById("aiInput")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+                askAI();
+            }
+
+        }
+    );
+
+
+function askAI() {
+
+    const input =
+        document.getElementById("aiInput");
+
+    const question =
+        input.value.trim().toLowerCase();
+
+    const response =
+        document.getElementById("aiResponse");
+
+
+    if (!question) {
+
+        response.textContent =
+            "Type a question first.";
+
+        return;
+    }
+
+
+    let answer;
+
+
+    if (
+        question.includes("location") ||
+        question.includes("where am i")
+    ) {
+
+        answer =
+            "I can help you find your location. Tap Find My Location.";
+
+    }
+
+    else if (
+        question.includes("hospital") ||
+        question.includes("doctor")
+    ) {
+
+        answer =
+            "Tap Safe Places to find hospitals and emergency services near you.";
+
+    }
+
+    else if (
+        question.includes("police")
+    ) {
+
+        answer =
+            "Tap Safe Places to search for police stations near you.";
+
+    }
+
+    else if (
+        question.includes("emergency") ||
+        question.includes("help")
+    ) {
+
+        answer =
+            "If you need urgent help, tap the Emergency button and share your location with someone you trust.";
+
+    }
+
+    else if (
+        question.includes("navigate") ||
+        question.includes("direction")
+    ) {
+
+        answer =
+            "Enter your destination above and tap Navigate.";
+
+    }
+
+    else {
+
+        answer =
+            "I'm SafeRoute AI. Ask me about your location, navigation, hospitals, police, safe places, or emergencies.";
+
+    }
+
+
+    response.textContent = answer;
+
+    input.value = "";
+
+}
+
+
+/* =====================================
+   BOTTOM NAVIGATION
+===================================== */
+
+const navButtons =
+    document.querySelectorAll(".nav-btn");
+
+
+navButtons.forEach(function(button) {
+
+    button.addEventListener(
+        "click",
+        function() {
+
+            navButtons.forEach(function(item) {
+
+                item.classList.remove("active");
+
+            });
+
+            button.classList.add("active");
+
+            showToast(
+                button.innerText + " selected."
+            );
+
+        }
+    );
+
+});
+
+
+/* =====================================
+   START SAFEROUTE
+===================================== */
+
+console.log(
+    "SafeRoute AI loaded successfully."
+);
+
+</script>
+
+</body>
+</html>
