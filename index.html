@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#07111f">
 <meta name="description" content="SafeRoute - Smart navigation and emergency location assistant">
-<title>SafeRoute</title>
+<title>SafeRoute AI</title>
 
 <style>
 * {
@@ -14,418 +14,501 @@
     padding: 0;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    background: #07111f;
-    color: white;
-    min-height: 100vh;
-    padding-bottom: 90px;
+:root {
+    --bg: #07111f;
+    --card: #0d1c2e;
+    --card2: #12243a;
+    --border: #203952;
+    --text: #ffffff;
+    --muted: #91a4b9;
+    --blue: #1677ff;
+    --green: #20c77a;
+    --red: #e53945;
 }
 
-.app-header {
+body {
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 85px;
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    background: #0b1728;
-    border-bottom: 1px solid #1b3048;
+    padding: 16px;
+    background: rgba(7,17,31,.97);
+    border-bottom: 1px solid var(--border);
 }
 
 .brand {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
-.brand-icon {
-    font-size: 35px;
+.logo {
+    font-size: 34px;
 }
 
 .brand h1 {
-    font-size: 24px;
+    font-size: 23px;
 }
 
 .brand p {
-    color: #9fb1c7;
-    font-size: 13px;
+    color: var(--muted);
+    font-size: 12px;
     margin-top: 3px;
 }
 
-.icon-button {
-    background: #14263b;
-    border: none;
+.settings-btn {
+    border: 1px solid var(--border);
+    background: var(--card);
     color: white;
-    font-size: 22px;
-    padding: 10px;
     border-radius: 12px;
-    cursor: pointer;
+    padding: 10px 12px;
+    font-size: 20px;
 }
 
-.app-container {
-    width: 100%;
-    max-width: 650px;
+.container {
+    max-width: 700px;
     margin: auto;
-    padding: 18px;
+    padding: 16px;
+}
+
+.hero {
+    margin-bottom: 16px;
+}
+
+.hero h2 {
+    font-size: 27px;
+    margin-bottom: 7px;
+}
+
+.hero p {
+    color: var(--muted);
+    line-height: 1.5;
 }
 
 .location-card {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: #0d1c2e;
-    border: 1px solid #1d344d;
-    border-radius: 18px;
+    background: linear-gradient(135deg,#0e2740,#0d1c2e);
+    border: 1px solid var(--border);
+    border-radius: 20px;
     padding: 18px;
     margin-bottom: 16px;
 }
 
-.status-icon {
-    font-size: 30px;
-}
-
-.location-information {
+.location-top {
     display: flex;
-    flex-direction: column;
-    gap: 5px;
+    gap: 12px;
+    align-items: center;
 }
 
-.small-label {
-    color: #7f94ab;
+.location-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    background: #163756;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 27px;
+}
+
+.location-label {
+    color: var(--muted);
     font-size: 11px;
     font-weight: bold;
 }
 
-#locationText {
+.location-name {
+    display: block;
+    margin-top: 4px;
     font-size: 17px;
 }
 
-#coordinatesText {
-    color: #9fb1c7;
+.coordinates {
+    display: block;
+    margin-top: 8px;
+    color: var(--muted);
     font-size: 12px;
 }
 
-.map-container {
-    width: 100%;
+.map {
     height: 300px;
     border-radius: 20px;
     overflow: hidden;
-    margin-bottom: 16px;
-}
-
-#map {
-    height: 100%;
-    width: 100%;
-    background:
-        linear-gradient(45deg, #102438 25%, transparent 25%),
-        linear-gradient(-45deg, #102438 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #102438 75%),
-        linear-gradient(-45deg, transparent 75%, #102438 75%);
-    background-size: 45px 45px;
-    background-position: 0 0, 0 22px, 22px -22px, -22px 0;
     position: relative;
+    margin-bottom: 14px;
+    background:
+        linear-gradient(35deg,#142b40 25%,transparent 25%),
+        linear-gradient(-35deg,#142b40 25%,transparent 25%),
+        linear-gradient(35deg,transparent 75%,#142b40 75%),
+        linear-gradient(-35deg,transparent 75%,#142b40 75%);
+    background-size: 55px 55px;
+    background-position: 0 0,0 27px,27px -27px,-27px 0;
+    border: 1px solid var(--border);
+}
+
+.map-overlay {
+    position: absolute;
+    inset: 0;
     display: flex;
-    justify-content: center;
     align-items: center;
-}
-
-.map-message {
+    justify-content: center;
     text-align: center;
+}
+
+.map-content {
+    background: rgba(7,17,31,.86);
+    border-radius: 18px;
     padding: 20px;
-    color: #a9bacd;
+    margin: 20px;
 }
 
-.map-message-icon {
-    font-size: 45px;
-    margin-bottom: 10px;
+.map-content .big {
+    font-size: 48px;
 }
 
-.map-message h2 {
-    color: white;
-    font-size: 20px;
-    margin-bottom: 8px;
+.map-content h3 {
+    margin: 7px 0;
 }
 
-.map-message p {
-    font-size: 13px;
+.map-content p {
+    color: var(--muted);
+    font-size: 12px;
     line-height: 1.5;
 }
 
 .map-pin {
     position: absolute;
-    font-size: 45px;
-    transform: translate(-50%, -50%);
     left: 50%;
     top: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 55px;
+    display: none;
 }
 
-.primary-button {
+.find-btn {
     width: 100%;
-    padding: 16px;
     border: none;
-    border-radius: 15px;
-    background: #1677ff;
+    background: var(--blue);
     color: white;
+    padding: 16px;
+    border-radius: 15px;
     font-size: 16px;
     font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 9px;
-    margin-bottom: 22px;
-}
-
-.primary-button:disabled {
-    opacity: 0.6;
-}
-
-.destination-section {
     margin-bottom: 20px;
 }
 
-.destination-section label {
-    display: block;
-    margin-bottom: 9px;
+.find-btn:disabled {
+    opacity: .65;
+}
+
+.search-title {
     font-weight: bold;
+    margin-bottom: 8px;
 }
 
 .search-box {
     display: flex;
     align-items: center;
-    background: #0d1c2e;
-    border: 1px solid #1d344d;
+    background: var(--card);
+    border: 1px solid var(--border);
     border-radius: 14px;
     padding: 0 12px;
+    margin-bottom: 18px;
 }
 
-.search-icon {
+.search-box span {
     font-size: 18px;
 }
 
 .search-box input {
     width: 100%;
-    padding: 15px 10px;
-    background: transparent;
     border: none;
     outline: none;
+    background: transparent;
     color: white;
+    padding: 15px 10px;
     font-size: 15px;
 }
 
 .search-box input::placeholder {
-    color: #71869d;
+    color: #6f849b;
 }
 
-.clear-button {
-    background: transparent;
-    border: none;
-    color: #9fb1c7;
-    font-size: 25px;
-    cursor: pointer;
-}
-
-.actions-grid {
+.grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 25px;
+    gap: 11px;
 }
 
-.action-card {
-    background: #0d1c2e;
-    border: 1px solid #1d344d;
+.card-btn {
+    min-height: 125px;
+    background: var(--card);
+    border: 1px solid var(--border);
     border-radius: 17px;
-    padding: 18px 10px;
     color: white;
-    cursor: pointer;
+    padding: 15px 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 7px;
 }
 
-.action-card:active {
-    transform: scale(0.97);
+.card-btn:active {
+    transform: scale(.97);
 }
 
-.action-icon {
-    font-size: 30px;
+.card-icon {
+    font-size: 31px;
 }
 
-.action-card strong {
-    font-size: 15px;
+.card-btn small {
+    color: var(--muted);
 }
 
-.action-card small {
-    color: #8498ae;
+.emergency {
+    border-color: #77303a;
 }
 
-.emergency-card {
-    border-color: #7b2830;
+.ai-card {
+    margin-top: 18px;
+    background: linear-gradient(135deg,#102e4b,#101d2e);
+    border: 1px solid #275276;
+    border-radius: 18px;
+    padding: 18px;
 }
 
-.quick-section {
-    margin-bottom: 20px;
+.ai-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 10px;
 }
 
-.section-heading {
+.ai-title span {
+    font-size: 27px;
+}
+
+.ai-card p {
+    color: #b4c4d4;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.ai-input {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.ai-input input {
+    flex: 1;
+    background: #07111f;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: white;
+    padding: 12px;
+    outline: none;
+}
+
+.ai-input button {
+    border: none;
+    border-radius: 10px;
+    background: var(--blue);
+    color: white;
+    padding: 0 15px;
+}
+
+.nearby {
+    margin-top: 20px;
+}
+
+.section-title {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
-.section-heading h2 {
+.section-title h2 {
     font-size: 19px;
 }
 
-.section-heading button {
-    background: transparent;
-    color: #4b9aff;
-    border: none;
-    cursor: pointer;
-}
-
-.nearby-list {
-    background: #0d1c2e;
+.place-list {
+    background: var(--card);
+    border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 20px;
-    border: 1px solid #1d344d;
+    padding: 15px;
 }
 
-.nearby-placeholder {
-    text-align: center;
-    color: #8498ae;
+.place {
+    display: flex;
+    gap: 12px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--border);
 }
 
-.nearby-placeholder span {
-    font-size: 30px;
+.place:last-child {
+    border-bottom: none;
 }
 
-.nearby-placeholder p {
-    margin-top: 8px;
-    font-size: 13px;
+.place-icon {
+    font-size: 25px;
 }
 
-.bottom-navigation {
+.place strong {
+    display: block;
+}
+
+.place small {
+    color: var(--muted);
+}
+
+.bottom-nav {
     position: fixed;
-    bottom: 0;
+    z-index: 30;
     left: 0;
     right: 0;
-    height: 75px;
-    background: #0b1728;
-    border-top: 1px solid #1b3048;
+    bottom: 0;
+    height: 72px;
+    background: rgba(13,28,46,.98);
+    border-top: 1px solid var(--border);
     display: flex;
     justify-content: space-around;
     align-items: center;
-    z-index: 10;
 }
 
-.nav-item {
-    background: transparent;
+.nav-btn {
     border: none;
-    color: #72879d;
-    cursor: pointer;
+    background: transparent;
+    color: #71859b;
     display: flex;
     flex-direction: column;
+    gap: 4px;
     align-items: center;
-    gap: 5px;
-    font-size: 20px;
 }
 
-.nav-item small {
-    font-size: 11px;
+.nav-btn.active {
+    color: #4c9aff;
 }
 
-.nav-item.active {
-    color: #4b9aff;
+.nav-btn span {
+    font-size: 21px;
+}
+
+.nav-btn small {
+    font-size: 10px;
 }
 
 .modal {
     position: fixed;
+    z-index: 100;
     inset: 0;
-    background: rgba(0,0,0,0.75);
-    display: flex;
+    background: rgba(0,0,0,.75);
+    display: none;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    z-index: 100;
+    padding: 18px;
 }
 
-.hidden {
-    display: none;
+.modal.show {
+    display: flex;
 }
 
-.modal-content {
+.modal-box {
     width: 100%;
-    max-width: 420px;
-    background: #0d1c2e;
-    border: 1px solid #29435f;
+    max-width: 430px;
+    background: var(--card);
+    border: 1px solid var(--border);
     border-radius: 22px;
-    padding: 28px 20px;
-    text-align: center;
+    padding: 24px;
     position: relative;
 }
 
-.modal-close {
+.close {
     position: absolute;
-    right: 15px;
+    right: 14px;
     top: 10px;
-    background: transparent;
     border: none;
+    background: transparent;
     color: white;
-    font-size: 30px;
-    cursor: pointer;
+    font-size: 29px;
 }
 
-.emergency-symbol {
-    font-size: 55px;
+.modal-box h2 {
     margin-bottom: 10px;
 }
 
-.modal-content h2 {
-    margin-bottom: 10px;
-}
-
-.modal-content p {
-    color: #9fb1c7;
+.modal-box p {
+    color: var(--muted);
     line-height: 1.5;
     font-size: 14px;
 }
 
-.emergency-location {
-    margin: 20px 0;
-    padding: 14px;
-    background: #07111f;
-    border-radius: 12px;
-}
-
-.emergency-location span {
-    display: block;
-    color: #7f94ab;
-    font-size: 12px;
-    margin-bottom: 6px;
-}
-
-.emergency-action-button {
+.modal-action {
     width: 100%;
-    padding: 15px;
-    background: #d62839;
+    padding: 14px;
     border: none;
-    border-radius: 13px;
+    border-radius: 12px;
+    margin-top: 14px;
+    background: var(--blue);
     color: white;
     font-weight: bold;
-    font-size: 15px;
-    cursor: pointer;
 }
 
-@media (max-width: 400px) {
-    .actions-grid {
-        gap: 8px;
+.danger {
+    background: var(--red);
+}
+
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 90px;
+    transform: translateX(-50%) translateY(20px);
+    background: #182a3d;
+    border: 1px solid var(--border);
+    color: white;
+    padding: 13px 17px;
+    border-radius: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transition: .25s;
+    z-index: 200;
+    width: max-content;
+    max-width: 90%;
+    text-align: center;
+    font-size: 13px;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+@media(max-width:380px) {
+    .grid {
+        gap: 7px;
     }
 
-    .app-container {
-        padding: 13px;
+    .card-btn {
+        min-height: 110px;
     }
 }
 </style>
@@ -433,140 +516,219 @@ body {
 
 <body>
 
-<header class="app-header">
+<header class="header">
+
     <div class="brand">
-        <div class="brand-icon">🧭</div>
+        <div class="logo">🧭</div>
+
         <div>
             <h1>SafeRoute</h1>
             <p>Navigate with confidence</p>
         </div>
     </div>
 
-    <button id="settingsButton" class="icon-button">
+    <button class="settings-btn" id="settingsBtn">
         ⚙️
     </button>
+
 </header>
 
 
-<main class="app-container">
+<main class="container">
 
-    <section class="location-card">
-        <div class="status-icon" id="locationStatusIcon">
-            📍
-        </div>
-
-        <div class="location-information">
-            <span class="small-label">YOUR LOCATION</span>
-
-            <strong id="locationText">
-                Location not detected
-            </strong>
-
-            <span id="coordinatesText">
-                Tap "Find My Location"
-            </span>
-        </div>
+    <section class="hero">
+        <h2>Stay safe. Get there.</h2>
+        <p>
+            Smart navigation and emergency assistance
+            designed to help you move with confidence.
+        </p>
     </section>
 
 
-    <section class="map-container">
-        <div id="map">
-            <div class="map-message" id="mapMessage">
-                <div class="map-message-icon">🗺️</div>
+    <section class="location-card">
 
-                <h2>Ready to locate you</h2>
+        <div class="location-top">
+
+            <div class="location-icon" id="locationIcon">
+                📍
+            </div>
+
+            <div>
+
+                <span class="location-label">
+                    YOUR LOCATION
+                </span>
+
+                <strong class="location-name" id="locationName">
+                    Location not detected
+                </strong>
+
+            </div>
+
+        </div>
+
+        <span class="coordinates" id="coordinates">
+            Tap "Find My Location" to locate yourself.
+        </span>
+
+    </section>
+
+
+    <section class="map" id="map">
+
+        <div class="map-overlay" id="mapOverlay">
+
+            <div class="map-content">
+
+                <div class="big">🗺️</div>
+
+                <h3>Ready to locate you</h3>
 
                 <p>
                     Allow location access to see
-                    your position.
+                    your current position.
                 </p>
+
             </div>
+
         </div>
+
+        <div class="map-pin" id="mapPin">
+            📍
+        </div>
+
     </section>
 
 
-    <button id="findMeButton" class="primary-button">
-        <span>📍</span>
-        <span>Find My Location</span>
+    <button class="find-btn" id="findLocationBtn">
+        📍 Find My Location
     </button>
 
 
-    <section class="destination-section">
+    <div class="search-title">
+        Where do you want to go?
+    </div>
 
-        <label for="destinationInput">
-            Where do you want to go?
-        </label>
+    <div class="search-box">
 
-        <div class="search-box">
+        <span>🔎</span>
 
-            <span class="search-icon">🔎</span>
+        <input
+            id="destination"
+            type="text"
+            placeholder="Search a destination..."
+        >
 
-            <input
-                type="text"
-                id="destinationInput"
-                placeholder="Search a destination..."
-                autocomplete="off"
-            >
-
-            <button
-                id="clearSearchButton"
-                class="clear-button">
-                ×
-            </button>
-
-        </div>
-    </section>
+    </div>
 
 
-    <section class="actions-grid">
+    <section class="grid">
 
-        <button class="action-card" id="navigateButton">
-            <span class="action-icon">🧭</span>
+        <button class="card-btn" id="navigateBtn">
+
+            <span class="card-icon">🧭</span>
+
             <strong>Navigate</strong>
+
             <small>Get directions</small>
+
         </button>
 
-        <button class="action-card" id="safePlacesButton">
-            <span class="action-icon">🛡️</span>
+
+        <button class="card-btn" id="safePlacesBtn">
+
+            <span class="card-icon">🛡️</span>
+
             <strong>Safe Places</strong>
+
             <small>Find nearby help</small>
+
         </button>
+
 
         <button
-            class="action-card emergency-card"
-            id="emergencyButton">
+            class="card-btn emergency"
+            id="emergencyBtn">
 
-            <span class="action-icon">🆘</span>
+            <span class="card-icon">🆘</span>
+
             <strong>Emergency</strong>
+
             <small>Get help quickly</small>
+
         </button>
 
-        <button class="action-card" id="shareLocationButton">
-            <span class="action-icon">📤</span>
+
+        <button class="card-btn" id="shareBtn">
+
+            <span class="card-icon">📤</span>
+
             <strong>Share Location</strong>
+
             <small>Send your location</small>
+
         </button>
 
     </section>
 
 
-    <section class="quick-section">
+    <section class="ai-card">
 
-        <div class="section-heading">
-            <h2>Nearby places</h2>
-            <button id="viewAllButton">
-                View all
-            </button>
+        <div class="ai-title">
+
+            <span>🤖</span>
+
+            <div>
+                <strong>SafeRoute AI</strong>
+                <div style="color:#91a4b9;font-size:11px;">
+                    Smart travel assistant
+                </div>
+            </div>
+
         </div>
 
-        <div class="nearby-list" id="nearbyList">
+        <p id="aiResponse">
+            Hello! I can help you find your location,
+            search for destinations, find safe places,
+            and share your location.
+        </p>
 
-            <div class="nearby-placeholder">
-                <span>📍</span>
-                <p>
-                    Find your location to discover
-                    nearby places.
-                </p>
+        <div class="ai-input">
+
+            <input
+                id="aiInput"
+                type="text"
+                placeholder="Ask SafeRoute AI..."
+            >
+
+            <button id="aiSend">
+                Send
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <section class="nearby">
+
+        <div class="section-title">
+            <h2>Nearby places</h2>
+        </div>
+
+        <div class="place-list" id="placeList">
+
+            <div class="place">
+
+                <div class="place-icon">📍</div>
+
+                <div>
+                    <strong>Location services</strong>
+                    <small>
+                        Find your location first.
+                    </small>
+                </div>
+
             </div>
 
         </div>
@@ -576,24 +738,24 @@ body {
 </main>
 
 
-<nav class="bottom-navigation">
+<nav class="bottom-nav">
 
-    <button class="nav-item active" id="homeNav">
+    <button class="nav-btn active" id="homeNav">
         <span>⌂</span>
         <small>Home</small>
     </button>
 
-    <button class="nav-item" id="mapNav">
+    <button class="nav-btn" id="mapNav">
         <span>🗺️</span>
         <small>Map</small>
     </button>
 
-    <button class="nav-item" id="savedNav">
+    <button class="nav-btn" id="savedNav">
         <span>★</span>
         <small>Saved</small>
     </button>
 
-    <button class="nav-item" id="profileNav">
+    <button class="nav-btn" id="profileNav">
         <span>👤</span>
         <small>Profile</small>
     </button>
@@ -601,44 +763,23 @@ body {
 </nav>
 
 
-<div class="modal hidden" id="emergencyModal">
+<div class="modal" id="modal">
 
-    <div class="modal-content">
+    <div class="modal-box">
 
-        <button
-            class="modal-close"
-            id="closeEmergencyButton">
+        <button class="close" id="closeModal">
             ×
         </button>
 
-        <div class="emergency-symbol">🆘</div>
-
-        <h2>Emergency Mode</h2>
-
-        <p>
-            Your current location can be shared
-            with someone you trust.
-        </p>
-
-        <div class="emergency-location">
-
-            <span>Current location</span>
-
-            <strong id="emergencyLocationText">
-                Not available
-            </strong>
-
-        </div>
-
-        <button
-            id="shareEmergencyButton"
-            class="emergency-action-button">
-
-            📤 Share My Location
-
-        </button>
+        <div id="modalContent"></div>
 
     </div>
+
+</div>
+
+
+<div class="toast" id="toast">
+    SafeRoute
 </div>
 
 
@@ -647,118 +788,186 @@ body {
 "use strict";
 
 
-/* ============================
-   VARIABLES
-============================ */
+/* =====================================
+   SAFEROUTE APP
+===================================== */
 
 let currentLocation = null;
 
 
-/* ============================
-   GET ELEMENTS
-============================ */
+/* =====================================
+   ELEMENTS
+===================================== */
 
-const findMeButton =
-    document.getElementById("findMeButton");
+const findLocationBtn =
+    document.getElementById("findLocationBtn");
 
-const locationText =
-    document.getElementById("locationText");
+const locationName =
+    document.getElementById("locationName");
 
-const coordinatesText =
-    document.getElementById("coordinatesText");
+const coordinates =
+    document.getElementById("coordinates");
 
-const locationStatusIcon =
-    document.getElementById("locationStatusIcon");
+const locationIcon =
+    document.getElementById("locationIcon");
 
-const map =
-    document.getElementById("map");
+const mapOverlay =
+    document.getElementById("mapOverlay");
 
-const mapMessage =
-    document.getElementById("mapMessage");
+const mapPin =
+    document.getElementById("mapPin");
 
-const destinationInput =
-    document.getElementById("destinationInput");
+const destination =
+    document.getElementById("destination");
 
-const clearSearchButton =
-    document.getElementById("clearSearchButton");
+const modal =
+    document.getElementById("modal");
 
-const navigateButton =
-    document.getElementById("navigateButton");
+const modalContent =
+    document.getElementById("modalContent");
 
-const safePlacesButton =
-    document.getElementById("safePlacesButton");
+const toast =
+    document.getElementById("toast");
 
-const emergencyButton =
-    document.getElementById("emergencyButton");
+const aiInput =
+    document.getElementById("aiInput");
 
-const shareLocationButton =
-    document.getElementById("shareLocationButton");
-
-const emergencyModal =
-    document.getElementById("emergencyModal");
-
-const closeEmergencyButton =
-    document.getElementById("closeEmergencyButton");
-
-const shareEmergencyButton =
-    document.getElementById("shareEmergencyButton");
-
-const emergencyLocationText =
-    document.getElementById("emergencyLocationText");
-
-const nearbyList =
-    document.getElementById("nearbyList");
+const aiResponse =
+    document.getElementById("aiResponse");
 
 
-/* ============================
-   CHECK LOCATION
-============================ */
+/* =====================================
+   TOAST
+===================================== */
 
-if (!navigator.geolocation) {
+function showToast(message) {
 
-    locationText.textContent =
-        "Location not supported";
+    toast.textContent = message;
 
-    coordinatesText.textContent =
-        "Your browser does not support GPS.";
+    toast.classList.add("show");
 
-    findMeButton.disabled = true;
+    setTimeout(function() {
+
+        toast.classList.remove("show");
+
+    }, 3000);
 
 }
 
 
-/* ============================
-   FIND MY LOCATION
-============================ */
+/* =====================================
+   MODAL
+===================================== */
 
-findMeButton.addEventListener(
+function openModal(html) {
+
+    modalContent.innerHTML = html;
+
+    modal.classList.add("show");
+
+}
+
+
+document
+    .getElementById("closeModal")
+    .addEventListener(
+        "click",
+        function() {
+
+            modal.classList.remove("show");
+
+        }
+    );
+
+
+modal.addEventListener(
+    "click",
+    function(event) {
+
+        if (event.target === modal) {
+
+            modal.classList.remove("show");
+
+        }
+
+    }
+);
+
+
+/* =====================================
+   SETTINGS
+===================================== */
+
+document
+    .getElementById("settingsBtn")
+    .addEventListener(
+        "click",
+        function() {
+
+            openModal(`
+
+                <h2>⚙️ SafeRoute Settings</h2>
+
+                <p>
+                    SafeRoute is ready to help you
+                    navigate and share your location.
+                </p>
+
+                <button
+                    class="modal-action"
+                    onclick="requestLocationPermission()">
+
+                    📍 Test Location Access
+
+                </button>
+
+            `);
+
+        }
+    );
+
+
+/* =====================================
+   LOCATION
+===================================== */
+
+findLocationBtn.addEventListener(
     "click",
     findMyLocation
 );
+
+
+function requestLocationPermission() {
+
+    modal.classList.remove("show");
+
+    findMyLocation();
+
+}
 
 
 function findMyLocation() {
 
     if (!navigator.geolocation) {
 
-        alert(
-            "Your browser does not support location services."
+        showToast(
+            "Location is not supported by this browser."
         );
 
         return;
     }
 
 
-    findMeButton.disabled = true;
+    findLocationBtn.disabled = true;
 
-    findMeButton.innerHTML =
-        "<span>⏳</span><span>Finding you...</span>";
+    findLocationBtn.textContent =
+        "⏳ Finding your location...";
 
-    locationText.textContent =
+    locationName.textContent =
         "Finding your location...";
 
-    coordinatesText.textContent =
-        "Please allow location permission";
+    coordinates.textContent =
+        "Please allow location access.";
 
 
     navigator.geolocation.getCurrentPosition(
@@ -782,117 +991,108 @@ function findMyLocation() {
             };
 
 
-            locationText.textContent =
-                "Location detected";
+            locationName.textContent =
+                "Location detected ✅";
 
 
-            coordinatesText.textContent =
+            coordinates.textContent =
                 latitude.toFixed(6) +
                 ", " +
                 longitude.toFixed(6) +
-                " • Accuracy ±" +
+                " • ±" +
                 Math.round(accuracy) +
                 "m";
 
 
-            locationStatusIcon.textContent =
+            locationIcon.textContent =
                 "✅";
 
 
-            findMeButton.disabled = false;
+            findLocationBtn.disabled = false;
 
-            findMeButton.innerHTML =
-                "<span>📍</span>" +
-                "<span>Update My Location</span>";
+            findLocationBtn.textContent =
+                "📍 Update My Location";
 
 
-            showMapLocation(
-                latitude,
-                longitude
+            mapOverlay.style.display =
+                "none";
+
+            mapPin.style.display =
+                "block";
+
+
+            updateNearbyPlaces();
+
+
+            showToast(
+                "Your location was found."
             );
-
-
-            emergencyLocationText.textContent =
-                latitude.toFixed(6) +
-                ", " +
-                longitude.toFixed(6);
-
-
-            nearbyList.innerHTML = `
-                <div class="nearby-placeholder">
-                    <span>📍</span>
-                    <p>
-                        Your location has been detected.
-                        Nearby places can be added next.
-                    </p>
-                </div>
-            `;
-
 
         },
 
+
         function(error) {
 
-            findMeButton.disabled = false;
+            findLocationBtn.disabled = false;
 
-            findMeButton.innerHTML =
-                "<span>📍</span>" +
-                "<span>Find My Location</span>";
+            findLocationBtn.textContent =
+                "📍 Find My Location";
 
 
             if (error.code === 1) {
 
-                locationText.textContent =
+                locationName.textContent =
                     "Permission denied";
 
-                coordinatesText.textContent =
-                    "Please allow location access.";
+                coordinates.textContent =
+                    "Allow location access and try again.";
 
-                alert(
-                    "Location permission was denied. Please allow location access in your browser settings."
+                showToast(
+                    "Please allow location access."
                 );
 
             }
 
             else if (error.code === 2) {
 
-                locationText.textContent =
+                locationName.textContent =
                     "Location unavailable";
 
-                coordinatesText.textContent =
-                    "Unable to determine your location.";
+                coordinates.textContent =
+                    "Turn on GPS/location services.";
 
-                alert(
-                    "Your location could not be determined. Please turn on GPS/location services and try again."
+                showToast(
+                    "Location could not be found."
                 );
 
             }
 
             else if (error.code === 3) {
 
-                locationText.textContent =
-                    "Location request timed out";
+                locationName.textContent =
+                    "Location timed out";
 
-                coordinatesText.textContent =
+                coordinates.textContent =
                     "Please try again.";
 
-                alert(
-                    "The location request took too long. Please try again."
+                showToast(
+                    "Location request timed out."
                 );
 
             }
 
             else {
 
-                locationText.textContent =
+                locationName.textContent =
                     "Location error";
 
-                coordinatesText.textContent =
+                coordinates.textContent =
                     "Please try again.";
 
-                alert(
+                showToast(
                     "Unable to find your location."
                 );
+
             }
 
         },
@@ -908,137 +1108,44 @@ function findMyLocation() {
 }
 
 
-/* ============================
-   SHOW LOCATION ON MAP AREA
-============================ */
+/* =====================================
+   NEARBY PLACES
+===================================== */
 
-function showMapLocation(
-    latitude,
-    longitude
-) {
+function updateNearbyPlaces() {
 
-    mapMessage.innerHTML = `
+    const placeList =
+        document.getElementById("placeList");
 
-        <div class="map-pin">
-            📍
-        </div>
 
-        <div style="
-            position:absolute;
-            bottom:15px;
-            left:15px;
-            right:15px;
-            background:rgba(7,17,31,0.9);
-            padding:10px;
-            border-radius:10px;
-            font-size:11px;
-            text-align:center;
-        ">
+    placeList.innerHTML = `
 
-            Your location<br>
+        <div class="place">
 
-            ${latitude.toFixed(5)},
-            ${longitude.toFixed(5)}
+            <div class="place-icon">🏥</div>
+
+            <div>
+                <strong>Hospitals</strong>
+                <small>
+                    Search hospitals near your location.
+                </small>
+            </div>
 
         </div>
 
-    `;
 
-}
+        <div class="place">
 
+            <div class="place-icon">👮</div>
 
-/* ============================
-   CLEAR SEARCH
-============================ */
+            <div>
+                <strong>Police Stations</strong>
+                <small>
+                    Find police stations nearby.
+                </small>
+            </div>
 
-clearSearchButton.addEventListener(
-    "click",
-    function() {
-
-        destinationInput.value = "";
-
-        destinationInput.focus();
-
-    }
-);
+        </div>
 
 
-/* ============================
-   NAVIGATE
-============================ */
-
-navigateButton.addEventListener(
-    "click",
-    function() {
-
-        const destination =
-            destinationInput.value.trim();
-
-
-        if (destination === "") {
-
-            alert(
-                "Please enter a destination first."
-            );
-
-            destinationInput.focus();
-
-            return;
-        }
-
-
-        if (!currentLocation) {
-
-            alert(
-                "Please find your location first."
-            );
-
-            return;
-        }
-
-
-        const url =
-            "https://www.google.com/maps/dir/?api=1" +
-            "&origin=" +
-            encodeURIComponent(
-                currentLocation.latitude +
-                "," +
-                currentLocation.longitude
-            ) +
-            "&destination=" +
-            encodeURIComponent(destination);
-
-
-        window.open(
-            url,
-            "_blank"
-        );
-
-    }
-);
-
-
-/* ============================
-   SAFE PLACES
-============================ */
-
-safePlacesButton.addEventListener(
-    "click",
-    function() {
-
-        const search =
-            "hospitals police stations emergency services near me";
-
-
-        const url =
-            "https://www.google.com/maps/search/" +
-            encodeURIComponent(search);
-
-
-        window.open(
-            url,
-            "_blank"
-        );
-
-    }
-);
+        <div 
