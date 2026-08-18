@@ -1335,116 +1335,186 @@ function shareCurrentLocation() {
    AI ASSISTANT
 ===================================== */
 
-document
-    .getElementById("aiSend")
-    .addEventListener(
-        "click",
-        askAI
-    );
+/* =====================================
+   SAFEROUTE AI ASSISTANT
+===================================== */
+
+const aiSendButton =
+    document.getElementById("aiSend");
+
+const aiInputBox =
+    document.getElementById("aiInput");
+
+const aiResponseBox =
+    document.getElementById("aiResponse");
 
 
-document
-    .getElementById("aiInput")
-    .addEventListener(
-        "keydown",
-        function(event) {
-
-            if (event.key === "Enter") {
-                askAI();
-            }
-
-        }
-    );
-
-
-function askAI() {
-
-    const input =
-        document.getElementById("aiInput");
+function safeRouteAI() {
 
     const question =
-        input.value.trim().toLowerCase();
-
-    const response =
-        document.getElementById("aiResponse");
+        aiInputBox.value.trim().toLowerCase();
 
 
-    if (!question) {
+    if (question === "") {
 
-        response.textContent =
-            "Type a question first.";
+        aiResponseBox.textContent =
+            "🤖 Type a question and I will help you.";
 
         return;
     }
 
 
-    let answer;
+    let answer =
+        "🤖 I'm SafeRoute AI. " +
+        "I can help with navigation, " +
+        "your location, safe places, " +
+        "and emergencies.";
 
 
     if (
+        question.includes("hello") ||
+        question.includes("hi") ||
+        question.includes("hey")
+    ) {
+
+        answer =
+            "👋 Hello! I'm SafeRoute AI. " +
+            "How can I help keep you safe today?";
+
+    }
+
+
+    else if (
         question.includes("location") ||
         question.includes("where am i")
     ) {
 
-        answer =
-            "I can help you find your location. Tap Find My Location.";
+        if (currentLocation) {
+
+            answer =
+                "📍 I found your location. " +
+                "Your coordinates are " +
+                currentLocation.latitude.toFixed(6) +
+                ", " +
+                currentLocation.longitude.toFixed(6) +
+                ".";
+
+        } else {
+
+            answer =
+                "📍 I don't have your location yet. " +
+                "Tap Find My Location first.";
+
+        }
 
     }
 
+
     else if (
-        question.includes("hospital") ||
-        question.includes("doctor")
+        question.includes("navigate") ||
+        question.includes("direction") ||
+        question.includes("route")
     ) {
 
         answer =
-            "Tap Safe Places to find hospitals and emergency services near you.";
+            "🧭 Enter your destination in the search box " +
+            "and tap Navigate. I'll help you open the route.";
 
     }
+
+
+    else if (
+        question.includes("hospital") ||
+        question.includes("doctor") ||
+        question.includes("medical")
+    ) {
+
+        answer =
+            "🏥 Tap Safe Places to find hospitals " +
+            "and medical help near you.";
+
+    }
+
 
     else if (
         question.includes("police")
     ) {
 
         answer =
-            "Tap Safe Places to search for police stations near you.";
+            "👮 Tap Safe Places to search for " +
+            "police stations near you.";
 
     }
 
+
     else if (
         question.includes("emergency") ||
+        question.includes("danger") ||
         question.includes("help")
     ) {
 
         answer =
-            "If you need urgent help, tap the Emergency button and share your location with someone you trust.";
+            "🆘 If you are in danger, tap Emergency. " +
+            "You can then share your location with " +
+            "someone you trust.";
 
     }
 
+
     else if (
-        question.includes("navigate") ||
-        question.includes("direction")
+        question.includes("safe place") ||
+        question.includes("safe places")
     ) {
 
         answer =
-            "Enter your destination above and tap Navigate.";
+            "🛡️ Safe Places helps you search for " +
+            "hospitals, police stations and other " +
+            "helpful places nearby.";
 
     }
 
-    else {
+
+    else if (
+        question.includes("share")
+    ) {
 
         answer =
-            "I'm SafeRoute AI. Ask me about your location, navigation, hospitals, police, safe places, or emergencies.";
+            "📤 Find your location first, then tap " +
+            "Share Location to send your map location.";
 
     }
 
 
-    response.textContent = answer;
+    aiResponseBox.textContent =
+        answer;
 
-    input.value = "";
+    aiInputBox.value = "";
 
 }
 
 
+/* AI BUTTON */
+
+aiSendButton.addEventListener(
+    "click",
+    safeRouteAI
+);
+
+
+/* ENTER KEY */
+
+aiInputBox.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Enter") {
+
+            safeRouteAI();
+
+        }
+
+    }
+);
 /* =====================================
    BOTTOM NAVIGATION
 ===================================== */
