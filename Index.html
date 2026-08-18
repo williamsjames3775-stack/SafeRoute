@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#0b1220"
+    >
+
+    <meta
+        name="description"
+        content="SafeRoute - Smart navigation and emergency location assistant"
+    >
+
+    <title>SafeRoute</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+</head>
+
+<body>
+
+    <!-- =========================
+         APP HEADER
+    ========================== -->
+
+    <header class="app-header">
+
+        <div class="brand">
+            <div class="brand-icon">🧭</div>
+
+            <div>
+                <h1>SafeRoute</h1>
+                <p>Navigate with confidence</p>
+            </div>
+        </div>
+
+        <button
+            id="settingsButton"
+            class="icon-button"
+            aria-label="Settings"
+        >
+            ⚙️
+        </button>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN APP
+    ========================== -->
+
+    <main class="app-container">
+
+        <!-- Location status -->
+
+        <section class="location-card">
+
+            <div class="status-icon" id="locationStatusIcon">
+                📍
+            </div>
+
+            <div class="location-information">
+
+                <span class="small-label">
+                    YOUR LOCATION
+                </span>
+
+                <strong id="locationText">
+                    Location not detected
+                </strong>
+
+                <span id="coordinatesText">
+                    Tap "Find Me" to locate yourself
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- MAP -->
+
+        <section class="map-container">
+
+            <div id="map">
+
+                <div class="map-message" id="mapMessage">
+
+                    <div class="map-message-icon">
+                        🗺️
+                    </div>
+
+                    <h2>Ready to locate you</h2>
+
+                    <p>
+                        Allow location access to see
+                        your position on the map.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- FIND ME -->
+
+        <button
+            id="findMeButton"
+            class="primary-button"
+        >
+            <span>📍</span>
+            <span>Find My Location</span>
+        </button>
+
+
+        <!-- DESTINATION SEARCH -->
+
+        <section class="destination-section">
+
+            <label for="destinationInput">
+                Where do you want to go?
+            </label>
+
+            <div class="search-box">
+
+                <span class="search-icon">
+                    🔎
+                </span>
+
+                <input
+                    type="text"
+                    id="destinationInput"
+                    placeholder="Search a destination..."
+                    autocomplete="off"
+                >
+
+                <button
+                    id="clearSearchButton"
+                    class="clear-button"
+                    aria-label="Clear search"
+                >
+                    ×
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- MAIN ACTIONS -->
+
+        <section class="actions-grid">
+
+            <button
+                class="action-card"
+                id="navigateButton"
+            >
+
+                <span class="action-icon">
+                    🧭
+                </span>
+
+                <strong>
+                    Navigate
+                </strong>
+
+                <small>
+                    Get directions
+                </small>
+
+            </button>
+
+
+            <button
+                class="action-card"
+                id="safePlacesButton"
+            >
+
+                <span class="action-icon">
+                    🛡️
+                </span>
+
+                <strong>
+                    Safe Places
+                </strong>
+
+                <small>
+                    Find nearby help
+                </small>
+
+            </button>
+
+
+            <button
+                class="action-card emergency-card"
+                id="emergencyButton"
+            >
+
+                <span class="action-icon">
+                    🆘
+                </span>
+
+                <strong>
+                    Emergency
+                </strong>
+
+                <small>
+                    Get help quickly
+                </small>
+
+            </button>
+
+
+            <button
+                class="action-card"
+                id="shareLocationButton"
+            >
+
+                <span class="action-icon">
+                    📤
+                </span>
+
+                <strong>
+                    Share Location
+                </strong>
+
+                <small>
+                    Send your location
+                </small>
+
+            </button>
+
+        </section>
+
+
+        <!-- QUICK PLACES -->
+
+        <section class="quick-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    Nearby places
+                </h2>
+
+                <button id="viewAllButton">
+                    View all
+                </button>
+
+            </div>
+
+
+            <div class="nearby-list" id="nearbyList">
+
+                <div class="nearby-placeholder">
+
+                    <span>📍</span>
+
+                    <p>
+                        Find your location to discover
+                        nearby places.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         BOTTOM NAVIGATION
+    ========================== -->
+
+    <nav class="bottom-navigation">
+
+        <button
+            class="nav-item active"
+            id="homeNav"
+        >
+            <span>⌂</span>
+            <small>Home</small>
+        </button>
+
+
+        <button
+            class="nav-item"
+            id="mapNav"
+        >
+            <span>🗺️</span>
+            <small>Map</small>
+        </button>
+
+
+        <button
+            class="nav-item"
+            id="savedNav"
+        >
+            <span>★</span>
+            <small>Saved</small>
+        </button>
+
+
+        <button
+            class="nav-item"
+            id="profileNav"
+        >
+            <span>👤</span>
+            <small>Profile</small>
+        </button>
+
+    </nav>
+
+
+    <!-- =========================
+         EMERGENCY MODAL
+    ========================== -->
+
+    <div
+        class="modal hidden"
+        id="emergencyModal"
+    >
+
+        <div class="modal-content emergency-modal">
+
+            <button
+                class="modal-close"
+                id="closeEmergencyButton"
+            >
+                ×
+            </button>
+
+            <div class="emergency-symbol">
+                🆘
+            </div>
+
+            <h2>
+                Emergency Mode
+            </h2>
+
+            <p>
+                Your location can be shared with
+                your trusted emergency contact.
+            </p>
+
+            <div class="emergency-location">
+
+                <span>
+                    Current location
+                </span>
+
+                <strong id="emergencyLocationText">
+                    Not available
+                </strong>
+
+            </div>
+
+            <button
+                id="shareEmergencyButton"
+                class="emergency-action-button"
+            >
+                📤 Share My Location
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script src="app.js"></script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color"
+          content="#07111f">
+
+    <meta name="description"
+          content="SafeRoute - Smart navigation and emergency location assistant">
+
+    <title>SafeRoute</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="app-header">
+
+        <div class="brand">
+            <div class="brand-icon">🧭</div>
+
+            <div>
+                <h1>SafeRoute</h1>
+                <p>Navigate with confidence</p>
+            </div>
+        </div>
+
+        <button
+            id="settingsButton"
+            class="icon-button">
+            ⚙️
+        </button>
+
+    </header>
+
+
+    <!-- MAIN APP -->
+    <main class="app-container">
+
+        <!-- LOCATION -->
+        <section class="location-card">
+
+            <div
+                class="status-icon"
+                id="locationStatusIcon">
+                📍
+            </div>
+
+            <div class="location-information">
+
+                <span class="small-label">
+                    YOUR LOCATION
+                </span>
+
+                <strong id="locationText">
+                    Location not detected
+                </strong>
+
+                <span id="coordinatesText">
+                    Tap "Find My Location"
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- MAP AREA -->
+        <section class="map-container">
+
+            <div id="map">
+
+                <div
+                    class="map-message"
+                    id="mapMessage">
+
+                    <div class="map-message-icon">
+                        🗺️
+                    </div>
+
+                    <h2>
+                        Ready to locate you
+                    </h2>
+
+                    <p>
+                        Allow location access to see
+                        your position.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- FIND LOCATION -->
+        <button
+            id="findMeButton"
+            class="primary-button">
+
+            <span>📍</span>
+
+            <span>
+                Find My Location
+            </span>
+
+        </button>
+
+
+        <!-- DESTINATION -->
+        <section class="destination-section">
+
+            <label for="destinationInput">
+                Where do you want to go?
+            </label>
+
+            <div class="search-box">
+
+                <span class="search-icon">
+                    🔎
+                </span>
+
+                <input
+                    type="text"
+                    id="destinationInput"
+                    placeholder="Search a destination..."
+                    autocomplete="off">
+
+                <button
+                    id="clearSearchButton"
+                    class="clear-button">
+
+                    ×
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ACTIONS -->
+        <section class="actions-grid">
+
+            <button
+                class="action-card"
+                id="navigateButton">
+
+                <span class="action-icon">
+                    🧭
+                </span>
+
+                <strong>
+                    Navigate
+                </strong>
+
+                <small>
+                    Get directions
+                </small>
+
+            </button>
+
+
+            <button
+                class="action-card"
+                id="safePlacesButton">
+
+                <span class="action-icon">
+                    🛡️
+                </span>
+
+                <strong>
+                    Safe Places
+                </strong>
+
+                <small>
+                    Find nearby help
+                </small>
+
+            </button>
+
+
+            <button
+                class="action-card emergency-card"
+                id="emergencyButton">
+
+                <span class="action-icon">
+                    🆘
+                </span>
+
+                <strong>
+                    Emergency
+                </strong>
+
+                <small>
+                    Get help quickly
+                </small>
+
+            </button>
+
+
+            <button
+                class="action-card"
+                id="shareLocationButton">
+
+                <span class="action-icon">
+                    📤
+                </span>
+
+                <strong>
+                    Share Location
+                </strong>
+
+                <small>
+                    Send your location
+                </small>
+
+            </button>
+
+        </section>
+
+
+        <!-- NEARBY PLACES -->
+        <section class="quick-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    Nearby places
+                </h2>
+
+                <button id="viewAllButton">
+                    View all
+                </button>
+
+            </div>
+
+
+            <div
+                class="nearby-list"
+                id="nearbyList">
+
+                <div class="nearby-placeholder">
+
+                    <span>📍</span>
+
+                    <p>
+                        Find your location to discover
+                        nearby places.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-navigation">
+
+        <button
+            class="nav-item active"
+            id="homeNav">
+
+            <span>⌂</span>
+            <small>Home</small>
+
+        </button>
+
+
+        <button
+            class="nav-item"
+            id="mapNav">
+
+            <span>🗺️</span>
+            <small>Map</small>
+
+        </button>
+
+
+        <button
+            class="nav-item"
+            id="savedNav">
+
+            <span>★</span>
+            <small>Saved</small>
+
+        </button>
+
+
+        <button
+            class="nav-item"
+            id="profileNav">
+
+            <span>👤</span>
+            <small>Profile</small>
+
+        </button>
+
+    </nav>
+
+
+    <!-- EMERGENCY MODAL -->
+    <div
+        class="modal hidden"
+        id="emergencyModal">
+
+        <div class="modal-content emergency-modal">
+
+            <button
+                class="modal-close"
+                id="closeEmergencyButton">
+
+                ×
+
+            </button>
+
+
+            <div class="emergency-symbol">
+                🆘
+            </div>
+
+            <h2>
+                Emergency Mode
+            </h2>
+
+            <p>
+                Your current location can be shared
+                with someone you trust.
+            </p>
+
+
+            <div class="emergency-location">
+
+                <span>
+                    Current location
+                </span>
+
+                <strong id="emergencyLocationText">
+                    Not available
+                </strong>
+
+            </div>
+
+
+            <button
+                id="shareEmergencyButton"
+                class="emergency-action-button">
+
+                📤 Share My Location
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         SAFEROUTE JAVASCRIPT
+         Everything below is JavaScript.
+    ================================================== -->
+
+    <script>
+
+        "use strict";
+
+
+        /* ==========================================
+           VARIABLES
+        ========================================== */
+
+        let currentLocation = null;
+
+
+        /* ==========================================
+           ELEMENTS
+        ========================================== */
+
+        const findMeButton =
+            document.getElementById("findMeButton");
+
+        const locationText =
+            document.getElementById("locationText");
+
+        const coordinatesText =
+            document.getElementById("coordinatesText");
+
+        const locationStatusIcon =
+            document.getElementById("locationStatusIcon");
+
+        const mapMessage =
+            document.getElementById("mapMessage");
+
+        const destinationInput =
+            document.getElementById("destinationInput");
+
+        const clearSearchButton =
+            document.getElementById("clearSearchButton");
+
+        const navigateButton =
+            document.getElementById("navigateButton");
+
+        const safePlacesButton =
+            document.getElementById("safePlacesButton");
+
+        const emergencyButton =
+            document.getElementById("emergencyButton");
+
+        const shareLocationButton =
+            document.getElementById("shareLocationButton");
+
+        const emergencyModal =
+            document.getElementById("emergencyModal");
+
+        const closeEmergencyButton =
+            document.getElementById("closeEmergencyButton");
+
+        const shareEmergencyButton =
+            document.getElementById("shareEmergencyButton");
+
+        const emergencyLocationText =
+            document.getElementById("emergencyLocationText");
+
+        const nearbyList =
+            document.getElementById("nearbyList");
+
+
+        /* ==========================================
+           START APP
+        ========================================== */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                console.log("SafeRoute started.");
+
+                checkLocationSupport();
+
+            }
+        );
+
+
+        /* ==========================================
+           CHECK GPS
+        ========================================== */
+
+        function checkLocationSupport() {
+
+            if (!navigator.geolocation) {
+
+                locationText.textContent =
+                    "GPS not supported";
+
+                coordinatesText.textContent =
+                    "Your browser cannot access location.";
+
+                findMeButton.disabled = true;
+
+                return;
+            }
+
+
+            locationText.textContent =
+                "Ready to locate you";
+
+            coordinatesText.textContent =
+                "Tap Find My Location";
+        }
+
+
+        /* ==========================================
+           FIND LOCATION
+        ========================================== */
+
+        function findMyLocation() {
+
+            if (!navigator.geolocation) {
+
+                showLocationError(
+                    "GPS is not supported by this browser."
+                );
+
+                return;
+            }
+
+
+            findMeButton.disabled = true;
+
+            findMeButton.innerHTML =
+                "<span>⏳</span><span>Finding you...</span>";
+
+            locationText.textContent =
+                "Finding your location...";
+
+            coordinatesText.textContent =
+                "Please allow location access";
+
+
+            navigator.geolocation.getCurrentPosition(
+
+                handleLocationSuccess,
+
+                handleLocationError,
+
+                {
+                    enableHighAccuracy: true,
+                    timeout: 20000,
+                    maximumAge: 0
+                }
+
+            );
+
+        }
+
+
+        /* ==========================================
+           LOCATION SUCCESS
+        ========================================== */
+
+        function handleLocationSuccess(position) {
+
+            const latitude =
+                position.coords.latitude;
+
+            const longitude =
+                position.coords.longitude;
+
+            const accuracy =
+                position.coords.accuracy;
+
+
+            currentLocation = {
+
+                latitude: latitude,
+
+                longitude: longitude,
+
+                accuracy: accuracy
+
+            };
+
+
+            locationText.textContent =
+                "Location detected";
+
+
+            coordinatesText.textContent =
+                latitude.toFixed(6) +
+                ", " +
+                longitude.toFixed(6) +
+                " • Accuracy ±" +
+                Math.round(accuracy) +
+                "m";
+
+
+            locationStatusIcon.textContent =
+                "✅";
+
+
+            findMeButton.disabled = false;
+
+            findMeButton.innerHTML =
+                "<span>📍</span>" +
+                "<span>Update My Location</span>";
+
+
+            mapMessage.innerHTML = `
+
+                <div class="map-message-icon">
+                    📍
+                </div>
+
+                <h2>
+                    You are here
+                </h2>
+
+                <p>
+                    Latitude:
+                    ${latitude.toFixed(6)}
+
+                    <br>
+
+                    Longitude:
+                    ${longitude.toFixed(6)}
+                </p>
+
+            `;
+
+
+            updateEmergencyLocation();
+
+            updateNearbyPlaces();
+
+
+            console.log(
+                "SafeRoute location:",
+                currentLocation
+            );
+
+        }
+
+
+        /* ==========================================
+           LOCATION ERROR
+        ========================================== */
+
+        function handleLocationError(error) {
+
+            let message =
+                "Unable to determine your location.";
+
+
+            if (
+                error.code ===
+                error.PERMISSION_DENIED
+            ) {
+
+                message =
+                    "Location permission was denied.";
+
+            }
+
+
+            else if (
+                error.code ===
+                error.POSITION_UNAVAILABLE
+            ) {
+
+                message =
+                    "Your location is unavailable.";
+
+            }
+
+
+            else if (
+                error.code ===
+                error.TIMEOUT
+            ) {
+
+                message =
+                    "Location request timed out.";
+
+            }
+
+
+            showLocationError(message);
+
+        }
+
+
+        /* ==========================================
+           SHOW GPS ERROR
+        ========================================== */
+
+        function showLocationError(message) {
+
+            locationText.textContent =
+                "Location unavailable";
+
+            coordinatesText.textContent =
+                message;
+
+            locationStatusIcon.textContent =
+                "⚠️";
+
+
+            findMeButton.disabled = false;
+
+            findMeButton.innerHTML =
+                "<span>📍</span>" +
+                "<span>Try Again</span>";
+
+        }
+
+
+        /* ==========================================
+           SEARCH BOX
+        ========================================== */
+
+        destinationInput.addEventListener(
+            "input",
+            function () {
+
+                if (
+                    destinationInput.value.trim()
+                    === ""
+                ) {
+
+                    clearSearchButton.style.display =
+                        "none";
+
+                }
+
+                else {
+
+                    clearSearchButton.style.display =
+                        "block";
+
+                }
+
+            }
+        );
+
+
+        /* ==========================================
+           CLEAR SEARCH
+        ========================================== */
+
+        clearSearchButton.addEventListener(
+            "click",
+            function () {
+
+                destinationInput.value = "";
+
+                clearSearchButton.style.display =
+                    "none";
+
+                destinationInput.focus();
+
+            }
+        );
+
+
+        /* ==========================================
+           NAVIGATE
+        ========================================== */
+
+        navigateButton.addEventListener(
+            "click",
+            function () {
+
+                const destination =
+                    destinationInput.value.trim();
+
+
+                if (!currentLocation) {
+
+                    alert(
+                        "Please find your location first."
+                    );
+
+                    findMyLocation();
+
+                    return;
+                }
+
+
+                if (!destination) {
+
+                    alert(
+                        "Enter a destination first."
+                    );
+
+                    destinationInput.focus();
+
+                    return;
+                }
+
+
+                alert(
+                    "Navigation for " +
+                    destination +
+                    " will be connected next."
+                );
+
+            }
+        );
+
+
+        /* ==========================================
+           SAFE PLACES
+        ========================================== */
+
+        safePlacesButton.addEventListener(
+            "click",
+            function () {
+
+                if (!currentLocation) {
+
+                    alert(
+                        "Please find your location first."
+                    );
+
+                    findMyLocation();
+
+                    return;
+                }
+
+
+                alert(
+                    "Nearby hospitals, police stations, " +
+                    "pharmacies and other places will " +
+                    "be connected next."
+                );
+
+            }
+        );
+
+
+        /* ==========================================
+           EMERGENCY MODE
+        ========================================== */
+
+        emergencyButton.addEventListener(
+            "click",
+            function () {
+
+                updateEmergencyLocation();
+
+                emergencyModal.classList.remove(
+                    "hidden"
+                );
+
+            }
+        );
+
+
+        /* ==========================================
+           CLOSE EMERGENCY
+        ========================================== */
+
+        closeEmergencyButton.addEventListener(
+            "click",
+            function () {
+
+                emergencyModal.classList.add(
+                    "hidden"
+                );
+
+            }
+        );
+
+
+        /* ==========================================
+           UPDATE EMERGENCY LOCATION
+        ========================================== */
+
+        function updateEmergencyLocation() {
+
+            if (!currentLocation) {
+
+                emergencyLocationText.textContent =
+                    "Location not detected";
+
+                return;
+            }
+
+
+            emergencyLocationText.textContent =
+
+                currentLocation.latitude.toFixed(6) +
+                ", " +
+                currentLocation.longitude.toFixed(6);
+
+        }
+
+
+        /* ==========================================
+           SHARE LOCATION
+        ========================================== */
+
+        async function shareCurrentLocation() {
+
+            if (!currentLocation) {
+
+                alert(
+                    "Find your location first."
+                );
+
+                findMyLocation();
+
+                return;
+            }
+
+
+            const latitude =
+                currentLocation.latitude;
+
+            const longitude =
+                currentLocation.longitude;
+
+
+            const locationURL =
+                "https://www.google.com/maps?q=" +
+                latitude +
+                "," +
+                longitude;
+
+
+            const shareText =
+                "My current SafeRoute location:\n" +
+                locationURL;
+
+
+            if (navigator.share) {
+
+                try {
+
+                    await navigator.share({
+
+                        title:
+                            "My SafeRoute Location",
+
+                        text:
+                            shareText
+
+                    });
+
+                }
+
+                catch (error) {
+
+                    console.log(
+                        "Sharing cancelled."
+                    );
+
+                }
+
+            }
+
+            else {
+
+                try {
+
+                    await navigator.clipboard.writeText(
+                        locationURL
+                    );
+
+                    alert(
+                        "Location link copied."
+                    );
+
+                }
+
+                catch (error) {
+
+                    alert(locationURL);
+
+                }
+
+     
