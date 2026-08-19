@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06111f">
+<meta name="description" content="SafeRoute 2.0 — smart navigation, emergency assistance and personal safety.">
+<title>SafeRoute 2.0</title>
+<style>
+:root{--bg:#06111f;--card:#0c1d30;--card2:#112943;--line:#203b56;--text:#f7fbff;--muted:#91a8bd;--blue:#197cff;--green:#20c77a;--red:#e53945;--yellow:#f2b84b}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:radial-gradient(circle at top,#112b45 0,#06111f 42%);color:var(--text);min-height:100vh;padding-bottom:84px}
+button,input{font:inherit}button{cursor:pointer;color:inherit}
+.header{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:13px 16px;background:rgba(6,17,31,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.brand{display:flex;gap:10px;align-items:center}.logo{font-size:31px}.brand h1{font-size:21px}.brand p{font-size:11px;color:var(--muted)}
+.icon-btn{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:9px 11px}
+.container{max-width:760px;margin:auto;padding:16px}
+.hero{padding:12px 0 18px}.hero h2{font-size:29px}.hero p{color:var(--muted);line-height:1.5;margin-top:7px}
+.status{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.pill{font-size:11px;padding:7px 10px;border-radius:999px;background:#10273d;border:1px solid var(--line);color:var(--muted)}.pill.ok{color:#72e6ad;border-color:#246d50}
+.sos{width:100%;padding:18px;border:0;border-radius:18px;background:linear-gradient(135deg,#e53945,#a91f31);font-size:19px;font-weight:900;margin-bottom:15px;box-shadow:0 10px 30px rgba(229,57,69,.22)}
+.card{background:linear-gradient(145deg,#10263d,#0b1929);border:1px solid var(--line);border-radius:20px;padding:16px;margin-bottom:15px;box-shadow:0 10px 35px rgba(0,0,0,.18)}
+.location{display:flex;align-items:center;gap:12px}.loc-icon{width:48px;height:48px;border-radius:15px;background:#173956;display:grid;place-items:center;font-size:25px}
+.muted{color:var(--muted)}.small{font-size:12px}
+.map{height:300px;overflow:hidden;position:relative;padding:0}.map iframe{width:100%;height:100%;border:0;display:none}.map-placeholder{height:100%;display:grid;place-items:center;text-align:center;padding:25px}.map-placeholder div{max-width:330px}.map-placeholder b{font-size:45px}.map-pin{position:absolute;display:none;left:50%;top:50%;transform:translate(-50%,-100%);font-size:45px;filter:drop-shadow(0 4px 5px #000)}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 15px}
+.btn{border:0;border-radius:13px;padding:13px;font-weight:700;background:var(--blue)}.btn.secondary{background:#142b40;border:1px solid var(--line)}.btn.danger{background:var(--red)}.btn.green{background:#15945b}
+.search{display:flex;gap:8px;margin:10px 0}.search input,.ai-row input,.field input{flex:1;background:#07111f;border:1px solid var(--line);border-radius:12px;color:#fff;padding:13px;outline:none}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.feature{min-height:118px;background:var(--card);border:1px solid var(--line);border-radius:17px;padding:14px;display:flex;flex-direction:column;justify-content:center;gap:7px;text-align:left}.feature span{font-size:28px}.feature small{color:var(--muted)}
+.ai{border-color:#28567e}.ai-title{display:flex;gap:10px;align-items:center}.ai-title span{font-size:28px}.chat{margin-top:12px;max-height:250px;overflow:auto;display:flex;flex-direction:column;gap:8px}.bubble{padding:10px 12px;border-radius:14px;max-width:88%;font-size:13px;line-height:1.45;white-space:pre-wrap}.bot{background:#142b40;align-self:flex-start}.user{background:#197cff;align-self:flex-end}.ai-row{display:flex;gap:8px;margin-top:10px}.ai-row button{width:76px;border:0;border-radius:12px;background:var(--blue)}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.places{display:flex;flex-direction:column}.place{display:flex;gap:11px;padding:13px 0;border-bottom:1px solid var(--line)}.place:last-child{border:0}.place-icon{font-size:24px}.place small{display:block;color:var(--muted);margin-top:3px}
+.risk{padding:13px;border-radius:14px;background:#1d1720;border:1px solid #5b343b;color:#ffd9dc;font-size:13px;line-height:1.45}
+.bottom{position:fixed;bottom:0;left:0;right:0;height:72px;z-index:60;background:rgba(9,23,38,.97);border-top:1px solid var(--line);display:flex;justify-content:space-around;align-items:center}.nav{background:none;border:0;color:#70879d;display:flex;flex-direction:column;gap:4px;align-items:center;font-size:10px}.nav span{font-size:21px}.nav.active{color:#58a0ff}
+.modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.76);display:none;align-items:flex-end;justify-content:center;padding:12px}.modal.show{display:flex}.sheet{width:100%;max-width:650px;max-height:88vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:20px;position:relative}.close{position:absolute;right:14px;top:10px;border:0;background:none;font-size:28px}.sheet h2{margin-bottom:9px}.sheet p{color:var(--muted);line-height:1.55;font-size:14px}.field{margin-top:12px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}.field input{width:100%}
+.toast{position:fixed;left:50%;bottom:88px;transform:translate(-50%,20px);opacity:0;pointer-events:none;transition:.25s;background:#172b40;border:1px solid var(--line);padding:12px 15px;border-radius:12px;z-index:200;font-size:13px;text-align:center;max-width:90%}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:420px){.hero h2{font-size:25px}.actions{grid-template-columns:1fr}.grid{gap:8px}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="brand"><div class="logo">🧭</div><div><h1>SafeRoute</h1><p>Smart safety companion</p></div></div>
+  <button class="icon-btn" id="settingsBtn">⚙️</button>
+</header>
+
+<main class="container">
+
+<section class="hero">
+  <h2>Stay safe. Get there.</h2>
+  <p>Smart navigation, emergency tools and a safety assistant in one place.</p>
+  <div class="status">
+    <span class="pill" id="gpsStatus">📍 GPS: Not detected</span>
+    <span class="pill ok">🛡️ SafeRoute ready</span>
+  </div>
+</section>
+
+<button class="sos" id="sosBtn">🆘 EMERGENCY / SOS</button>
+
+<section class="card">
+  <div class="location">
+    <div class="loc-icon" id="locIcon">📍</div>
+    <div>
+      <div class="small muted">YOUR LOCATION</div>
+      <strong id="locationName">Location not detected</strong>
+      <div class="small muted" id="coordinates">Tap Find My Location.</div>
+    </div>
+  </div>
+</section>
+
+<section class="card map">
+  <iframe id="mapFrame" title="SafeRoute map"></iframe>
+  <div class="map-placeholder" id="mapPlaceholder">
+    <div><b>🗺️</b><h3>Interactive map</h3><p class="muted small">Find your location to load a map centered on you.</p></div>
+  </div>
+  <div class="map-pin" id="mapPin">📍</div>
+</section>
+
+<div class="actions">
+  <button class="btn" id="findBtn">📍 Find My Location</button>
+  <button class="btn secondary" id="shareBtn">📤 Share Location</button>
+</div>
+
+<section class="card">
+  <strong>Where do you want to go?</strong>
+  <div class="search">
+    <input id="destination" placeholder="e.g. nearest hospital">
+    <button class="btn" id="goBtn">Go</button>
+  </div>
+  <div class="small muted">Enter a destination and SafeRoute will open navigation.</div>
+</section>
+
+<section class="grid">
+  <button class="feature" id="hospitalBtn"><span>🏥</span><strong>Hospitals</strong><small>Find medical help</small></button>
+  <button class="feature" id="policeBtn"><span>👮</span><strong>Police</strong><small>Find police stations</small></button>
+  <button class="feature" id="fireBtn"><span>🚒</span><strong>Fire Service</strong><small>Find fire stations</small></button>
+  <button class="feature" id="pharmacyBtn"><span>💊</span><strong>Pharmacy</strong><small>Find medicine</small></button>
+</section>
+
+<section class="card ai">
+  <div class="ai-title"><span>🤖</span><div><strong>SafeRoute AI</strong><div class="small muted">Safety & navigation assistant</div></div></div>
+  <div class="chat" id="chat">
+    <div class="bubble bot">Hello! I’m SafeRoute AI. Ask me about your location, nearby help, navigation, emergency actions, or safety.</div>
+  </div>
+  <div class="ai-row">
+    <input id="aiInput" placeholder="Ask SafeRoute AI...">
+    <button id="aiSend">Send</button>
+  </div>
+</section>
+
+<section class="card">
+  <div class="section-head"><strong>Nearby safety services</strong><button class="icon-btn" id="refreshPlaces">↻</button></div>
+  <div id="places" class="places">
+    <div class="place"><div class="place-icon">🧭</div><div><strong>Waiting for location</strong><small>Find your location to get useful nearby searches.</small></div></div>
+  </div>
+</section>
+
+<section class="card">
+  <div class="section-head"><strong>Safety center</strong></div>
+  <div class="risk">⚠️ <strong>Important:</strong> SafeRoute is an assistance tool. In a real emergency, contact your local emergency service or a trusted person. Do not rely on AI alone.</div>
+</section>
+
+</main>
+
+<nav class="bottom">
+  <button class="nav active" id="homeNav"><span>⌂</span>Home</button>
+  <button class="nav" id="mapNav"><span>🗺️</span>Map</button>
+  <button class="nav" id="savedNav"><span>★</span>Saved</button>
+  <button class="nav" id="profileNav"><span>👤</span>Profile</button>
+</nav>
+
+<div class="modal" id="modal"><div class="sheet"><button class="close" id="closeModal">×</button><div id="modalContent"></div></div></div>
+<div class="toast" id="toast">SafeRoute</div>
+
+<script>
+"use strict";
+
+const $=id=>document.getElementById(id);
+let currentLocation=null;
+
+function toast(msg){
+  $("toast").textContent=msg;
+  $("toast").classList.add("show");
+  setTimeout(()=>$("toast").classList.remove("show"),3000);
+}
+
+function openModal(html){
+  $("modalContent").innerHTML=html;
+  $("modal").classList.add("show");
+}
+
+$("closeModal").onclick=()=>$("modal").classList.remove("show");
+$("modal").onclick=e=>{if(e.target===$("modal"))$("modal").classList.remove("show")};
+
+function loadMap(){
+  if(!currentLocation)return;
+  const {latitude,longitude}=currentLocation;
+  $("mapFrame").src=
+    `https://www.openstreetmap.org/export/embed.html?bbox=${longitude-.03}%2C${latitude-.02}%2C${longitude+.03}%2C${latitude+.02}&layer=mapnik&marker=${latitude}%2C${longitude}`;
+  $("mapFrame").style.display="block";
+  $("mapPlaceholder").style.display="none";
+  $("mapPin").style.display="block";
+}
+
+function findLocation(){
+  if(!navigator.geolocation){
+    toast("Your browser does not support GPS.");
+    return;
+  }
+
+  $("findBtn").disabled=true;
+  $("findBtn").textContent="⏳ Finding...";
+
+  navigator.geolocation.getCurrentPosition(
+    position=>{
+      const {latitude,longitude,accuracy}=position.coords;
+
+      currentLocation={latitude,longitude,accuracy};
+
+      $("locationName").textContent="Location detected ✅";
+      $("coordinates").textContent=
+        `${latitude.toFixed(6)}, ${longitude.toFixed(6)} • ±${Math.round(accuracy)}m`;
+
+      $("gpsStatus").textContent="📍 GPS: Active";
+      $("gpsStatus").classList.add("ok");
+      $("locIcon").textContent="✅";
+
+      $("findBtn").disabled=false;
+      $("findBtn").textContent="📍 Update Location";
+
+      loadMap();
+      renderPlaces();
+      toast("Location found.");
+    },
+    error=>{
+      $("findBtn").disabled=false;
+      $("findBtn").textContent="📍 Find My Location";
+
+      if(error.code===1)toast("Location permission was denied.");
+      else if(error.code===2)toast("Location is unavailable.");
+      else toast("Location request timed out.");
+    },
+    {enableHighAccuracy:true,timeout:20000,maximumAge:0}
+  );
+}
+
+$("findBtn").onclick=findLocation;
+
+function mapSearch(query){
+  if(!currentLocation){
+    toast("Find your location first.");
+    return;
+  }
+
+  const {latitude,longitude}=currentLocation;
+  const url=
+    `https://www.google.com/maps/search/${encodeURIComponent(query)}/@${latitude},${longitude},14z`;
+
+  window.open(url,"_blank","noopener");
+}
+
+$("hospitalBtn").onclick=()=>mapSearch("hospital");
+$("policeBtn").onclick=()=>mapSearch("police station");
+$("fireBtn").onclick=()=>mapSearch("fire station");
+$("pharmacyBtn").onclick=()=>mapSearch("pharmacy");
+
+function navigate(){
+  const destination=$("destination").value.trim();
+
+  if(!destination){
+    toast("Enter a destination.");
+    return;
+  }
+
+  if(!currentLocation){
+    toast("Find your location first.");
+    return;
+  }
+
+  const {latitude,longitude}=currentLocation;
+
+  const url=
+    `https://www.google.com/maps/dir/?api=1&origin=${latitude},${longitude}&destination=${encodeURIComponent(destination)}&travelmode=driving`;
+
+  window.open(url,"_blank","noopener");
+}
+
+$("goBtn").onclick=navigate;
+$("destination").addEventListener("keydown",e=>{
+  if(e.key==="Enter")navigate();
+});
+
+function shareLocation(){
+  if(!currentLocation){
+    toast("Find your location first.");
+    return;
+  }
+
+  const {latitude,longitude}=currentLocation;
+
+  const text=
+    `I’m sharing my SafeRoute location: https://www.google.com/maps?q=${latitude},${longitude}`;
+
+  if(navigator.share){
+    navigator.share({
+      title:"My SafeRoute location",
+      text:text
+    }).catch(()=>{});
+  }else if(navigator.clipboard){
+    navigator.clipboard.writeText(text);
+    toast("Location link copied.");
+  }else{
+    openModal(`<h2>📤 Share Location</h2><p>${text}</p>`);
+  }
+}
+
+$("shareBtn").onclick=shareLocation;
+
+function emergency(){
+  if(!currentLocation){
+    openModal(`
+      <h2>🆘 Emergency Mode</h2>
+      <p>First obtain your location so SafeRoute can prepare a location link.</p>
+      <button class="btn danger" style="width:100%;margin-top:14px"
+        onclick="findLocation();document.getElementById('modal').classList.remove('show')">
+        📍 Get My Location
+      </button>
+    `);
+    return;
+  }
+
+  const {latitude,longitude}=currentLocation;
+  const link=`https://www.google.com/maps?q=${latitude},${longitude}`;
+
+  openModal(`
+    <h2>🆘 Emergency Mode</h2>
+    <p>Your current location is ready to share with someone you trust.</p>
+
+    <div class="field">
+      <label>LOCATION LINK</label>
+      <input readonly value="${link}">
+    </div>
+
+    <button class="btn danger" style="width:100%;margin-top:14px"
+      onclick="shareLocation()">
+      📤 Share My Location
+    </button>
+
+    <button class="btn secondary" style="width:100%;margin-top:9px"
+      onclick="window.open('${link}','_blank')">
+      🗺️ Open Location
+    </button>
+  `);
+}
+
+$("sosBtn").onclick=emergency;
+
+function renderPlaces(){
+  $("places").innerHTML=`
+    <div class="place">
+      <div class="place-icon">🏥</div>
+      <div><strong>Hospitals</strong><small>Search hospitals near you.</small></div>
+    </div>
+    <div class="place">
+      <div class="place-icon">👮</div>
+      <div><strong>Police stations</strong><small>Search police stations near you.</small></div>
+    </div>
+    <div class="place">
+      <div class="place-icon">🚒</div>
+      <div><strong>Fire stations</strong><small>Search fire stations near you.</small></div>
+    </div>
+    <div class="place">
+      <div class="place-icon">💊</div>
+      <div><strong>Pharmacies</strong><small>Search pharmacies near you.</small></div>
+    </div>
+  `;
+}
+
+$("refreshPlaces").onclick=()=>{
+  if(!currentLocation){
+    toast("Find your location first.");
+    return;
+  }
+  renderPlaces();
+  toast("Nearby services refreshed.");
+};
+
+function addChat(text,type="bot"){
+  const bubble=document.createElement("div");
+  bubble.className=`bubble ${type}`;
+  bubble.textContent=text;
+  $("chat").appendChild(bubble);
+  $("chat").scrollTop=$("chat").scrollHeight;
+}
+
+function aiReply(raw){
+  const q=raw.toLowerCase().trim();
+  if(!q)return;
+
+  addChat(raw,"user");
+
+  let answer="";
+
+  if(/danger|emergency|help me|attack|unsafe|threat|robbery/.test(q)){
+    answer=
+      "If you are in immediate danger, move toward a populated or safer place and contact local emergency services or a trusted person. Tap SOS to prepare your location for sharing.";
+  }
+  else if(/where am i|my location|location/.test(q)){
+    answer=currentLocation
+      ? `Your GPS coordinates are ${currentLocation.latitude.toFixed(6)}, ${currentLocation.longitude.toFixed(6)}. You can use Share Location to send them.`
+      : "I don't have your location yet. Tap Find My Location and allow GPS access.";
+  }
+  else if(/hospital|doctor|clinic|medical/.test(q)){
+    answer=currentLocation
+      ? "Tap Hospitals to search for medical help near your current position."
+      : "Find your location first, then tap Hospitals.";
+  }
+  else if(/police|security/.test(q)){
+    answer=currentLocation
+      ? "Tap Police to search for nearby police stations."
+      : "Find your location first, then tap Police.";
+  }
+  else if(/fire/.test(q)){
+    answer=currentLocation
+      ? "Tap Fire Service to search for nearby fire stations."
+      : "Find your location first, then tap Fire Service.";
+  }
+  else if(/pharmacy|medicine/.test(q)){
+    answer=currentLocation
+      ? "Tap Pharmacy to search for nearby pharmacies."
+      : "Find your location first, then tap Pharmacy.";
+  }
+  else if(/navigate|direction|route|go to/.test(q)){
+    answer=
+      "Enter your destination in the search box and press Go. SafeRoute will open navigation from your current location.";
+  }
+  else if(/share/.test(q)){
+    answer=currentLocation
+      ? "Tap Share Location to send a location link using the sharing options available on your phone."
+      : "Find your location first, then I can prepare a location link.";
+  }
+  else if(/safe|safety|advice|travel/.test(q)){
+    answer=
+      "For safer travel: keep your phone charged, tell someone where you are going, avoid isolated areas when possible, stay aware of your surroundings, and keep emergency contacts accessible.";
+  }
+  else{
+    answer=
+      "I can help with location, navigation, hospitals, police, fire stations, pharmacies, location sharing and emergency safety. Try “Where am I?” or “Find a hospital.”";
+  }
+
+  setTimeout(()=>addChat(answer),250);
+}
+
+function sendAI(){
+  const input=$("aiInput");
+  const value=input.value;
+  input.value="";
+  aiReply(value);
+}
+
+$("aiSend").onclick=sendAI;
+$("aiInput").addEventListener("keydown",e=>{
+  if(e.key==="Enter")sendAI();
+});
+
+$("settingsBtn").onclick=()=>{
+  openModal(`
+    <h2>⚙️ SafeRoute Settings</h2>
+    <p>Location is requested only when you use location features. This version does not send your GPS coordinates to a SafeRoute server.</p>
+    <button class="btn secondary" style="width:100%;margin-top:14px"
+      onclick="findLocation();document.getElementById('modal').classList.remove('show')">
+      📍 Test GPS
+    </button>
+  `);
+};
+
+$("mapNav").onclick=()=>{
+  window.scrollTo({
+    top:document.querySelector(".map").offsetTop-80,
+    behavior:"smooth"
+  });
+};
+
+$("homeNav").onclick=()=>{
+  window.scrollTo({top:0,behavior:"smooth"});
+};
+
+$("savedNav").onclick=()=>{
+  toast("Saved routes will be added in the next module.");
+};
+
+$("profileNav").onclick=()=>{
+  openModal(`
+    <h2>👤 SafeRoute Profile</h2>
+    <p>Profile, emergency contacts, saved routes and account synchronization are prepared as the next backend module.</p>
+  `);
+};
+
+window.addEventListener("online",()=>toast("Internet connection restored."));
+window.addEventListener("offline",()=>toast("You are offline. Some features may not work."));
+</script>
+</body>
+</html>
