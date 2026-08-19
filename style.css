@@ -1,0 +1,683 @@
+/* ================================
+   SAFEROUTE
+   GLOBAL STYLES
+================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --background: #07111f;
+    --surface: #0d1b2d;
+    --surface-light: #13263d;
+    --border: #203650;
+    --text: #ffffff;
+    --muted: #91a4b8;
+    --primary: #2f80ed;
+    --primary-dark: #1765c1;
+    --danger: #e53935;
+    --success: #20c997;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--background);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    padding-bottom: 80px;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 16px;
+
+    background: rgba(7, 17, 31, 0.96);
+    border-bottom: 1px solid var(--border);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-icon {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: var(--primary);
+
+    font-size: 24px;
+}
+
+.brand h1 {
+    font-size: 20px;
+    margin-bottom: 3px;
+}
+
+.brand p {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.icon-button {
+    width: 42px;
+    height: 42px;
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    background: var(--surface);
+
+    color: white;
+    font-size: 18px;
+
+    cursor: pointer;
+}
+
+
+/* ================================
+   MAIN CONTAINER
+================================ */
+
+.app-container {
+    width: 100%;
+    max-width: 650px;
+
+    margin: auto;
+    padding: 16px;
+}
+
+
+/* ================================
+   LOCATION CARD
+================================ */
+
+.location-card {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 15px;
+
+    margin-bottom: 15px;
+
+    border: 1px solid var(--border);
+    border-radius: 16px;
+
+    background: var(--surface);
+}
+
+.status-icon {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(47, 128, 237, 0.15);
+
+    font-size: 22px;
+}
+
+.location-information {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+
+    min-width: 0;
+}
+
+.small-label {
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+#locationText {
+    font-size: 15px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#coordinatesText {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+
+/* ================================
+   MAP
+================================ */
+
+.map-container {
+    width: 100%;
+    height: 350px;
+
+    overflow: hidden;
+
+    margin-bottom: 15px;
+
+    border-radius: 18px;
+
+    border: 1px solid var(--border);
+
+    background: #15273b;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+
+    position: relative;
+}
+
+.map-message {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 85%;
+
+    text-align: center;
+
+    padding: 20px;
+}
+
+.map-message-icon {
+    font-size: 45px;
+
+    margin-bottom: 10px;
+}
+
+.map-message h2 {
+    font-size: 19px;
+
+    margin-bottom: 8px;
+}
+
+.map-message p {
+    color: var(--muted);
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* ================================
+   PRIMARY BUTTON
+================================ */
+
+.primary-button {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 15px;
+
+    border: none;
+    border-radius: 14px;
+
+    background: var(--primary);
+
+    color: white;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    margin-bottom: 20px;
+
+    transition: 0.2s;
+}
+
+.primary-button:active {
+    transform: scale(0.98);
+    background: var(--primary-dark);
+}
+
+
+/* ================================
+   DESTINATION SEARCH
+================================ */
+
+.destination-section {
+    margin-bottom: 20px;
+}
+
+.destination-section label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 12px 14px;
+
+    border-radius: 14px;
+
+    border: 1px solid var(--border);
+
+    background: var(--surface);
+}
+
+.search-icon {
+    font-size: 18px;
+}
+
+.search-box input {
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 14px;
+}
+
+.search-box input::placeholder {
+    color: #687d92;
+}
+
+.clear-button {
+    border: none;
+
+    background: transparent;
+
+    color: var(--muted);
+
+    font-size: 22px;
+
+    cursor: pointer;
+}
+
+
+/* ================================
+   ACTION GRID
+================================ */
+
+.actions-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 25px;
+}
+
+.action-card {
+    min-height: 125px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-start;
+    justify-content: center;
+
+    gap: 6px;
+
+    padding: 15px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    background: var(--surface);
+
+    color: white;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.action-card:active {
+    transform: scale(0.97);
+}
+
+.action-icon {
+    font-size: 28px;
+
+    margin-bottom: 5px;
+}
+
+.action-card strong {
+    font-size: 14px;
+}
+
+.action-card small {
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+.emergency-card {
+    border-color: rgba(229, 57, 53, 0.5);
+}
+
+
+/* ================================
+   NEARBY PLACES
+================================ */
+
+.section-heading {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 12px;
+}
+
+.section-heading h2 {
+    font-size: 17px;
+}
+
+.section-heading button {
+    border: none;
+
+    background: transparent;
+
+    color: var(--primary);
+
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+.nearby-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.nearby-placeholder {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 18px;
+
+    border-radius: 14px;
+
+    border: 1px solid var(--border);
+
+    background: var(--surface);
+}
+
+.nearby-placeholder span {
+    font-size: 25px;
+}
+
+.nearby-placeholder p {
+    color: var(--muted);
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* ================================
+   BOTTOM NAVIGATION
+================================ */
+
+.bottom-navigation {
+    position: fixed;
+
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    z-index: 200;
+
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    background: rgba(7, 17, 31, 0.98);
+
+    border-top: 1px solid var(--border);
+}
+
+.nav-item {
+    width: 25%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    border: none;
+
+    background: transparent;
+
+    color: var(--muted);
+
+    cursor: pointer;
+}
+
+.nav-item span {
+    font-size: 19px;
+}
+
+.nav-item small {
+    font-size: 10px;
+}
+
+.nav-item.active {
+    color: var(--primary);
+}
+
+
+/* ================================
+   MODAL
+================================ */
+
+.modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.75);
+}
+
+.hidden {
+    display: none;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 400px;
+
+    position: relative;
+
+    padding: 25px;
+
+    border-radius: 20px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    text-align: center;
+}
+
+.modal-close {
+    position: absolute;
+
+    top: 12px;
+    right: 15px;
+
+    border: none;
+
+    background: transparent;
+
+    color: var(--muted);
+
+    font-size: 28px;
+
+    cursor: pointer;
+}
+
+.emergency-symbol {
+    font-size: 55px;
+
+    margin-bottom: 10px;
+}
+
+.emergency-modal h2 {
+    margin-bottom: 10px;
+}
+
+.emergency-modal > p {
+    color: var(--muted);
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    margin-bottom: 20px;
+}
+
+.emergency-location {
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+
+    padding: 14px;
+
+    margin-bottom: 15px;
+
+    border-radius: 12px;
+
+    background: var(--background);
+}
+
+.emergency-location span {
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+.emergency-location strong {
+    font-size: 12px;
+
+    word-break: break-word;
+}
+
+.emergency-action-button {
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: var(--danger);
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* ================================
+   RESPONSIVE DESIGN
+================================ */
+
+@media (min-width: 700px) {
+
+    .app-container {
+        padding: 25px;
+    }
+
+    .map-container {
+        height: 450px;
+    }
+
+    .actions-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .action-card {
+        min-height: 145px;
+    }
+}
